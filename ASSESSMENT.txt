@@ -1,0 +1,238 @@
+
+University Business School
+-------------------------------------
+
+
+Project details:
+--------------------
+
+Drupal:
+username:admin    pass:ubsubs
+username:test      pass:test
+
+git@github.com:komarjelena/ubs.git
+
+
+
+
+
+Set up and running
+-------------------------
+
+I've used docker in my setup, you don't need to use it in order to set it up and run it successfully.
+
+You can use your default environment, drupal root is located in webroot folder, and db dump is located in database folder.
+
+In case you want to use docker to setup environment, you need to have Docker and Docker-compose installed on your local machine.
+
+
+
+
+
+Docker setup (optional)
+------------------
+
+https://docs.docker.com/install/
+https://docs.docker.com/compose/install/
+
+after git clone  git@github.com:komarjelena/ubs.git
+
+cd ~/path_to_projects/$PROJECT/
+
+For starting docker
+-------------------------
+docker-compose up -d
+
+After starting docker in linux
+you need to change permissions
+------------------------------
+cd webroot
+
+sudo chown {user}:docker -R webroot/
+
+cd webroot/sites/default
+sudo chmod 777 -R files (This should be changed after drupal creates files folder)
+
+In browser go to http://ubs.pma.loc
+Import sql dump file from database folder into database called drupal.
+
+
+Drupal install
+---------------------
+DB configuration you need to enter
+
+DB type: MYSQL
+DB name: drupal
+DB username: drupal
+DB password: drupal
+Advanced option - HOST: mariadb
+
+
+*After this it should be up and running!*
+
+
+
+For stopping docker
+------------------
+docker-compose down
+
+
+For using drush
+------------------
+docker-compose exec php sh
+cd webroot
+drush status
+
+
+
+
+
+List of installed modules:
+--------------------------
+
+Adminimal Toolbar
+Module Filter
+Devel
+Language
+Paragraphs
+Focal point
+Video Embed Field
+Better Exposed Filters
+Flag
+
+
+
+
+I have chosen Drupal 8 for this build as it more modern, has better multi language support, views in core, new twig theming layer many other promising technologies.
+
+On other hand, Drupal 7 is still my favorite because it's stable, mature and
+has huge list of modules as well as extensive online documentation.
+
+
+Site have following structure:
+
+Courses is node type with the following fields:
+----------------------------------------------
+
+1.Introductory text -
+2.Course language
+3.Primary image -The editor can select the focal point of an image in the edit form (i have created image style and used it on courses
+4.Detailed course description paragraphs - I have made two paragraph types, referenced in one field so we can add unlimited number of elements so we can easily change its weight on page
+5.Optional youtube video is video embed field
+6.Course downloads is file field where can be uploaded only pdf file
+7.MOOC link
+8.Also link field configured to be unlimited
+9.The course cost in USD is integer
+
+
+Components	- field_components	- Entity reference revisions
+Detailed course description paragraphs - There are two paragraph types, referenced in one field so unlimited number of elements can be added and ts weight on page can easily be adjusted.
+
+Course cost - field_course_cost - Number (integer)
+Difficulty Level - field_difficulty_level - (Taxonomy) Entity reference
+
+Download - field_download - File
+External Links - field_external_links - Link
+Introductory text - field_introductory_text - Text (formatted, long)
+Mooc link - field_mooc_link - Link
+
+Primary image - field_primary_image - Image
+The editor can select the focal point of an image in the edit form (i have created image style and used it on courses
+
+Topic Areas - field_topic_areas - (Taxonomy) Entity reference
+Video link - field_video_link - Video Embed
+
+
+
+
+Following Taxonomies are created:
+Topic Areas - with no additional fields, configured as translatable,  used as a reference on Courses
+Difficulty Level - with no additional fields, configured as translatable,  used as a reference on Courses
+
+Also Topic Area is mentioned that might be changed later,
+so I have configured widget of this reference field in the way that can be created if doesn't exist with autocomplete.
+
+If there is need for Course to be assigned to multiple Topic Area, this can be easily changed in field settings to unlimited.
+
+
+
+Topic Areas vocabulary has following terms:
+----------------------------------------------------------------------
+
+1.Business Management
+2.Business Finance
+3.Innovation
+4.Entrepreneurship
+
+Here is the list of the Topic area categories
+/admin/structure/taxonomy/manage/topic_areas_/overview
+
+
+
+Difficulty Level vocabulary has following terms
+-------------------
+
+1.Introductory
+2.Intermediate
+3.Advanced
+4.Specialty
+
+Here is the list of the Difficulty Level
+/admin/structure/taxonomy/manage/difficulty_level_/overview
+
+
+
+*Multilingual Deliverable
+--------------------------
+The user can view the courses site in
+   *German
+   *French
+   *English
+
+
+List of languages and configuration, you can find on this link /admin/config/regional/language.
+
+*If the user is on a course, and changes languages, the same course displays, but
+in the selected language.
+
+This can be tested on home page by clicking on any result, go to course detail page and change language by clicking on language links in header region.
+For every page that hasn't been translated it will be shown default language.
+
+
+Also on Homepage clicking on language links inside header region will show entire listing in chosen language.
+
+The administrator UI is in English.
+
+
+Course Detail page
+------------------
+All elements are shown on course detail page (maybe some fields are left out on some pages).
+
+As there is a requirement that users can add a course into a whis list and also there is a mention of the permission that users can see other users whish listed content, I have created a block visible on course detail (full) page which shows who else may have added that particular course in their wish-list.
+
+
+Listing page
+------------------
+A user can find courses through a listing page
+A user can limit the search to
+   *A specific Topic Area
+   *A specific Difficulty Level
+   *A range of price
+The listing page shows the course title
+The listing page shows a thumbnail of the course image
+The course can be clicked
+
+
+Registered users
+----------------
+Users interested in doing courses can register on your site
+Users can add a course to a wishlist
+A user can remove courses from only their own wishlist
+A user’s wishlist can be viewed by all registered users ( I have created a block on course detail page which shows who else added it to wish-list)
+
+
+Drupal Requirements
+-------------------
+*Add 8 courses with placeholder copy and images
+*Enable an anonymous user to select their site language
+
