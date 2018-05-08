@@ -41,7 +41,10 @@ cd ~/path_to_projects/$PROJECT/
 
 For starting docker
 -------------------------
-docker-compose up -d
+my docker setup is using traefik so first you have to go into traefik folder and do
+`docker-compose up -d`
+and then return to git root and do
+`docker-compose up -d` to start the project docker containers
 
 After starting docker in linux
 you need to change permissions
